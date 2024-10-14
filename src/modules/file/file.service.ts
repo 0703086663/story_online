@@ -66,7 +66,7 @@ export class FileService {
 
       return fileInfos
     } catch (error) {
-      throw new BadRequestException('Error during file upload')
+      throw new BadRequestException(error, 'Error during file upload')
     }
   }
 
