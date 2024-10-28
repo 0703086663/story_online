@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiTags } from '@nestjs/swagger'
 import { RateService } from './rate.service'
 import { RateDto, UpdateRateDto } from './rate.dto'
-import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse } from 'src/common'
+import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse, User } from 'src/common'
 
 @ApiTags('rate')
 @Controller('rate')
@@ -12,8 +12,8 @@ export class RateController {
   @Authorization()
   @Post()
   @PostResponse('Rate')
-  create(@Body() createRateDto: RateDto) {
-    return this.rateService.create(createRateDto)
+  create(@User('id') userId: string, @Body() createRateDto: RateDto) {
+    return this.rateService.create(+userId, createRateDto)
   }
 
   @Get(':id')
@@ -25,14 +25,14 @@ export class RateController {
   @Authorization()
   @Patch(':id')
   @PatchResponse('Rate')
-  update(@Param('id') id: string, @Body() updateRateDto: UpdateRateDto) {
-    return this.rateService.update(+id, updateRateDto)
+  update(@User('id') userId: string, @Param('id') id: string, @Body() updateRateDto: UpdateRateDto) {
+    return this.rateService.update(+userId, +id, updateRateDto)
   }
 
   @Authorization()
   @Delete(':id')
   @DeleteResponse('Rate')
-  remove(@Param('id') id: string) {
-    return this.rateService.remove(+id)
+  remove(@User('id') userId: string, @Param('id') id: string) {
+    return this.rateService.remove(+userId, +id)
   }
 }
