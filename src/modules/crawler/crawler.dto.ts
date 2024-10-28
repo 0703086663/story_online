@@ -23,3 +23,11 @@ export class JjwrcDto {
   })
   uri: string
 }
+
+export class CozyDto {
+  @ApiProperty({
+    description: 'Link of website',
+    example: 'https://cozynovel.xyz/truyen/ca-khong-co-chan/chuong-16-dai-gia-nhan-tu/',
+  })
+  uri: string
+}

@@ -1,6 +1,6 @@
 import { Controller, Body, Post } from '@nestjs/common'
 import { CrawlerService } from './crawler.service'
-import { JjwrcDto, TruyenFullDto, TruyenHdDto } from './crawler.dto'
+import { CozyDto, JjwrcDto, TruyenFullDto, TruyenHdDto } from './crawler.dto'
 import { ApiTags } from '@nestjs/swagger'
 
 @ApiTags('crawler')
@@ -21,5 +21,10 @@ export class CrawlerController {
   @Post('/jjwrc')
   fromJjwrc(@Body() crawlerDto: JjwrcDto) {
     return this.crawlerService.fromJjwrc(crawlerDto)
+  }
+
+  @Post('/cozy')
+  fromCozy(@Body() crawlerDto: CozyDto) {
+    return this.crawlerService.fromCozy(crawlerDto)
   }
 }

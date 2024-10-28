@@ -1,7 +1,7 @@
 import * as he from 'he'
 import { aiTranslate, crawling } from 'src/common/utils'
 import { STATUS } from 'src/common'
-import { JjwrcDto, TruyenFullDto, TruyenHdDto } from './crawler.dto'
+import { CozyDto, JjwrcDto, TruyenFullDto, TruyenHdDto } from './crawler.dto'
 import { IChapter, IProduct } from 'src/common/interfaces'
 
 export class CrawlerService {
@@ -247,6 +247,38 @@ export class CrawlerService {
       } else {
         return { data: null, message: 'Not found (Wrong uri or element)' }
       }
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
+  async fromCozy(crawler: CozyDto) {
+    const { uri } = crawler
+
+    try {
+      const result = {
+        chapters: [],
+      }
+
+      await crawling(uri, ($: cheerio.CheerioAPI) => {
+        const crawlName = $('h1#chapter-heading').text().trim()
+        const chapterName = crawlName.split('-')[1].trim()
+
+        const element = $('.reading-content .text-left')
+
+        if (element.html()) {
+          const chapter: IChapter = {
+            chapterName,
+            content: element
+              .text()
+              .replace(/[\n\t]+/g, ' ')
+              .trim(),
+            chapterNumber: +chapterName.split(':')[0].replace(/\D/g, ''),
+          }
+          result.chapters.push(chapter)
+        }
+      })
+      return { data: result, message: 'Data found' }
     } catch (err) {
       throw new Error(err)
     }
