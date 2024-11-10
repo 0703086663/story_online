@@ -35,6 +35,6 @@ export class AuthService {
     if (!isPasswordValid) throw new BadRequestException('Invalid password')
 
     const { password: hashed, ...userWithoutPassword } = user
-    return { access_token: await this.jwt.signAsync(userWithoutPassword), user: userWithoutPassword }
+    return { accessToken: await this.jwt.signAsync(userWithoutPassword), user: userWithoutPassword }
   }
 }

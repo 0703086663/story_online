@@ -16,6 +16,10 @@ USER_PASSWORD=user          # user@example.com
 # [Minio] Run minio in local
 USE_MINIO=0 # or 1 if use
 MINIO_USE_SSL=false # true if production
+
+# [Database]
+# If you want example data then set it `1`
+USE_FAKE_DATA=
 ```
 
 ## Database

@@ -77,7 +77,7 @@ model user {
   email         String           @unique 
   phone         String?
   birthdate     DateTime?
-  picture       String?
+  image         String?
   password      String?
   money         Float            @default(0)
   refreshToken  String?

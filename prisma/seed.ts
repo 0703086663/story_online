@@ -21,7 +21,9 @@ export async function seed() {
 
 seed()
   .then(async () => {
-    // await devMigrate(50)
+    if (Number(process.env.USE_FAKE_DATA) === 1) {
+      await devMigrate(50)
+    }
   })
   .catch(e => {
     console.error(e)
@@ -45,7 +47,7 @@ async function devMigrate(numberRecords: number) {
         password: bcrypt.hashSync('123456', Number(process.env.SALT_BCRYPT)),
         phone: faker.phone.number(),
         birthdate: faker.date.past(),
-        picture: faker.image.avatar(),
+        image: faker.image.avatar(),
         money: parseFloat(faker.finance.amount({ min: 100, max: 10000, dec: 2 })),
         refreshToken: faker.string.uuid(),
         emailVerified: faker.datatype.boolean(),

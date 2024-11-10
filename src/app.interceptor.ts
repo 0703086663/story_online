@@ -18,7 +18,8 @@ export class LoggingInterceptor implements NestInterceptor {
       }),
       catchError(err => {
         const logMessage = this.buildLogMessage(req, res, now, err.status)
-        req.url && this.logger.error(`${logMessage} | \x1b[31m[Error] - ${err.message}\x1b[31m`)
+        if (err.status < 400) this.logger.warn(`${logMessage} | \x1b[33m[Warn] - ${err.message}\x1b[33m`)
+        else req.url && this.logger.error(`${logMessage} | \x1b[31m[Error] - ${err.message}\x1b[31m`)
         throw err
       }),
     )

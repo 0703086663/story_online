@@ -3,12 +3,6 @@ import { faker } from '@faker-js/faker'
 
 export class RateDto {
   @ApiProperty({
-    description: 'Id of user',
-    example: 1,
-  })
-  userId: string
-
-  @ApiProperty({
     description: 'Id of product',
     example: 1,
   })

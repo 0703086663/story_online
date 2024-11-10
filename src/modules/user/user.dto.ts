@@ -35,10 +35,10 @@ export class UserDto {
 
   @ApiProperty({
     required: false,
-    description: 'Profile picture URL of the user',
+    description: 'Profile image URL of the user',
     example: faker.image.avatar(),
   })
-  picture?: string
+  image?: string
 
   //   @ApiProperty({
   //     required: false,

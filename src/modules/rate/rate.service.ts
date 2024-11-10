@@ -6,7 +6,7 @@ import { PrismaService } from '../prisma/prisma.service'
 export class RateService {
   constructor(private prisma: PrismaService) {}
 
-  async create(rateDto: RateDto) {
+  async create(userId: number, rateDto: RateDto) {
     if (!rateDto.rating) throw new BadGatewayException('Rating cannot be null')
 
     if (rateDto.rating != 1 && rateDto.rating != 2 && rateDto.rating != 3 && rateDto.rating != 4 && rateDto.rating != 5)
@@ -15,7 +15,7 @@ export class RateService {
     try {
       return await this.prisma.rate.create({
         data: {
-          createdBy: +rateDto.userId,
+          createdBy: userId,
           productId: +rateDto.productId,
           rating: +rateDto.rating,
         },
@@ -41,7 +41,7 @@ export class RateService {
     }
   }
 
-  async update(id: number, updateRateDto: UpdateRateDto) {
+  async update(userId: number, id: number, updateRateDto: UpdateRateDto) {
     if (!updateRateDto.rating) throw new BadGatewayException('Rating cannot be null')
 
     if (
@@ -63,9 +63,9 @@ export class RateService {
     }
   }
 
-  async remove(id: number) {
+  async remove(userId: number, id: number) {
     return await this.prisma.rate.delete({
-      where: { id },
+      where: { id, createdBy: userId },
     })
   }
 }
