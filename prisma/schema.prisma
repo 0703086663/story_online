@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum STATE {
+  ACTIVE
+  INACTIVE
+}
+
 // prisma/schema.prisma
 enum STATUS {
   PROGRESS
@@ -27,6 +32,7 @@ model category {
   name        String    @unique
   image       String?
   description String?
+  state         STATE           @default(ACTIVE)
   products    product[]
   updatedAt   DateTime   @updatedAt
 }
@@ -38,6 +44,7 @@ model product {
   source        String
   image         String
   status        STATUS          @default(PROGRESS)
+  state         STATE           @default(ACTIVE)
   viewCount     Int             @default(0)
   description   String?
   createdBy     Int
@@ -60,6 +67,7 @@ model chapter {
   content       String
   chapterNumber Int
   price         Float?
+  state         STATE           @default(ACTIVE)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   users         Int[]

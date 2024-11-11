@@ -1,4 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger'
+import { STATE } from 'src/common'
 
 export class CategoryDto {
   @ApiProperty({
@@ -12,6 +13,13 @@ export class CategoryDto {
     example: 'Kiếm hiệp',
   })
   name: string
+
+  @ApiProperty({
+    required: false,
+    description: 'STATE of category: ACTIVE | INACTIVE',
+    example: 'ACTIVE',
+  })
+  state?: STATE
 
   @ApiProperty({
     description: 'Description of the category',

@@ -1,7 +1,7 @@
 import { ApiProperty, PickType } from '@nestjs/swagger'
 import { faker } from '@faker-js/faker'
 import { InheritCategoryDto } from '../category/category.dto'
-import { STATUS } from 'src/common/enums'
+import { STATE, STATUS } from 'src/common/enums'
 
 export class ProductDto {
   @ApiProperty({ required: false, default: 1 })
@@ -31,6 +31,13 @@ export class ProductDto {
     example: faker.image.url(),
   })
   image: string
+
+  @ApiProperty({
+    required: false,
+    description: 'STATE of book: ACTIVE | INACTIVE',
+    example: 'ACTIVE',
+  })
+  state?: STATE
 
   @ApiProperty({
     required: false,

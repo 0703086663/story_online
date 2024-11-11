@@ -68,6 +68,7 @@ async function devMigrate(numberRecords: number) {
         source: faker.internet.url(),
         image: faker.image.urlPlaceholder({ format: 'png' }),
         status: faker.helpers.arrayElement(['PROGRESS', 'DONE']),
+        state: faker.helpers.arrayElement(['INACTIVE', 'ACTIVE']),
         authorName: faker.person.fullName(),
         viewCount: 0,
         createdAt: faker.date.between({ from: '2000-01-01', to: Date.now() }),
@@ -124,6 +125,7 @@ async function devMigrate(numberRecords: number) {
       data: {
         productId: randomProduct.id,
         chapterName: faker.lorem.words(),
+        state: faker.helpers.arrayElement(['INACTIVE', 'ACTIVE']),
         content: faker.lorem.paragraphs({ min: 100, max: 150 }, '<br/>\n'),
         chapterNumber: (maxChapter?.chapterNumber ?? 0) + 1, // Increment from the max or start at 1
         price: Math.round(parseFloat(faker.finance.amount({ min: 50, max: 100, dec: 2 }))),

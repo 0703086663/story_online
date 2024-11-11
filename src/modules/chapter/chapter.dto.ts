@@ -1,5 +1,6 @@
 import { ApiProperty, PickType } from '@nestjs/swagger'
 import { faker } from '@faker-js/faker'
+import { STATE } from 'src/common'
 
 function _generateHtmlContent(paragraphCount: number): string {
   const paragraphs = []
@@ -29,6 +30,13 @@ export class ChapterDto {
     example: _generateHtmlContent(50),
   })
   content: string
+
+  @ApiProperty({
+    required: false,
+    description: 'STATE of chapter: ACTIVE | INACTIVE',
+    example: 'ACTIVE',
+  })
+  state?: STATE
 
   @ApiProperty({
     required: true,
