@@ -1,11 +1,10 @@
-version: '3.2'
 services:
   app:
     image: son29032001/novel
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: novel_api
+    container_name: api
     restart: always
     ports:
       - 3334:3334

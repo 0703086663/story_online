@@ -6,7 +6,5 @@ services:
       dockerfile: Dockerfile
     container_name: api
     restart: always
-    ports:
-      - 3334:3334
     env_file:
       - .env
