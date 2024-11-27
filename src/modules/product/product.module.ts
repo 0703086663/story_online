@@ -4,11 +4,10 @@ import { ChapterModule } from '../chapter/chapter.module'
 import { RateModule } from '../rate/rate.module'
 import { ProductService } from './product.service'
 import { ProductController } from './product.controller'
-import { FileModule } from '../file/file.module'
 
 @Module({
   controllers: [ProductController],
   providers: [ProductService],
-  imports: [PrismaModule, ChapterModule, RateModule, FileModule],
+  imports: [PrismaModule, ChapterModule, RateModule],
 })
 export class ProductModule {}
