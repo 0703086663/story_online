@@ -3,8 +3,6 @@ import { Response } from 'express'
 import * as Minio from 'minio'
 import { IFile } from 'src/common/interfaces'
 
-const bucket = 'readordead'
-
 @Injectable()
 export class FileService {
   private minioClient: Minio.Client
@@ -72,7 +70,7 @@ export class FileService {
 
   async downloadFile(fileName: string, response: Response): Promise<void> {
     try {
-      const stat = await this.minioClient.statObject(bucket, fileName)
+      const stat = await this.minioClient.statObject(this.bucket, fileName)
       const { size, metaData } = stat
 
       response.writeHead(200, {
@@ -84,7 +82,7 @@ export class FileService {
         'Content-Meta': JSON.stringify(metaData),
       })
 
-      const dataStream = await this.minioClient.getObject(bucket, fileName)
+      const dataStream = await this.minioClient.getObject(this.bucket, fileName)
       dataStream.pipe(response)
 
       dataStream.on('error', err => new Error(err.message))
