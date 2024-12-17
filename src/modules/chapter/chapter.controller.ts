@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiTags } from '@nestjs/swagger'
 import { ChapterService } from './chapter.service'
 import { CreateChapterDto, UpdateChapterDto } from './chapter.dto'
-import { DeleteResponse, GetResponse, PatchResponse, PostResponse, Authorization } from 'src/common'
+import { DeleteResponse, GetResponse, PatchResponse, PostResponse, Authorization } from '@/commons'
 
 @ApiTags('chapter')
 @Controller('chapter')

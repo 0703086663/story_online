@@ -2,7 +2,7 @@ import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger'
 import { Controller, Post, Body } from '@nestjs/common'
 import { CreatePaymentDto, IntentDto } from './payment.dto'
 import { PaymentService } from './payment.service'
-import { Authorization, PostResponse } from 'src/common'
+import { Authorization, PostResponse } from '@/commons'
 
 @ApiTags('payment')
 @Controller('payment')

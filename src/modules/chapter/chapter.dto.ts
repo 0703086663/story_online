@@ -1,6 +1,6 @@
 import { ApiProperty, PickType } from '@nestjs/swagger'
 import { faker } from '@faker-js/faker'
-import { STATE } from 'src/common'
+import { STATE } from '@/commons'
 
 function _generateHtmlContent(paragraphCount: number): string {
   const paragraphs = []

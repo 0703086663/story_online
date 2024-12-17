@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common'
 import { Response } from 'express'
 import * as Minio from 'minio'
-import { IFile } from 'src/common/interfaces'
+import { IFile } from '@/commons/interfaces'
 
 @Injectable()
 export class FileService {

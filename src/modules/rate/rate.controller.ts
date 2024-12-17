@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiTags } from '@nestjs/swagger'
 import { RateService } from './rate.service'
 import { RateDto, UpdateRateDto } from './rate.dto'
-import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse, User } from 'src/common'
+import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse, User } from '@/commons'
 
 @ApiTags('rate')
 @Controller('rate')

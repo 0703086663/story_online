@@ -2,7 +2,7 @@ import { Controller, Get, Body, Patch, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ListService } from './list.service'
 import { UpdateListDto } from './list.dto'
-import { CLASSIFICATION, GetResponse, PatchResponse, Authorization } from 'src/common'
+import { CLASSIFICATION, GetResponse, PatchResponse, Authorization } from '@/commons'
 
 @ApiTags('list')
 @Controller('list')

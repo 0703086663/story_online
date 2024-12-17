@@ -1,6 +1,6 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
-import { calculateAverageRate, stripHtml } from 'src/common/utils'
-import { PrismaService } from '../prisma/prisma.service'
+import { calculateAverageRate, stripHtml } from '@/commons/utils'
+import { PrismaService } from '@/modules/prisma/prisma.service'
 import { CreateProductDto, UpdateProductDto } from './product.dto'
 
 @Injectable()

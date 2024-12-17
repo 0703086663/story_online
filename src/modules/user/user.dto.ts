@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { faker } from '@faker-js/faker'
-import { InheritCommentDto } from '../comment/comment.dto'
+import { InheritCommentDto } from '@/modules/comment/comment.dto'
 
 export class UserDto {
   @ApiProperty({ required: false, default: 1 })

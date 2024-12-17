@@ -10,10 +10,10 @@ import {
   PatchResponse,
   PostResponse,
   User,
-} from 'src/common'
+} from '@/commons'
 import { ProductService } from './product.service'
-import { ChapterService } from '../chapter/chapter.service'
-import { RateService } from '../rate/rate.service'
+import { ChapterService } from '@/modules/chapter/chapter.service'
+import { RateService } from '@/modules/rate/rate.service'
 
 @ApiTags('product')
 @Controller('product')

@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
 import { CategoryDto } from './category.dto'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '@/modules/prisma/prisma.service'
 
 @Injectable()
 export class CategoryService {

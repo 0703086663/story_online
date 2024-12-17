@@ -1,7 +1,7 @@
 import { ApiProperty, PickType } from '@nestjs/swagger'
 import { faker } from '@faker-js/faker'
-import { InheritCategoryDto } from '../category/category.dto'
-import { STATE, STATUS } from 'src/common/enums'
+import { InheritCategoryDto } from '@/modules/category/category.dto'
+import { STATE, STATUS } from '@/commons/enums'
 
 export class ProductDto {
   @ApiProperty({ required: false, default: 1 })

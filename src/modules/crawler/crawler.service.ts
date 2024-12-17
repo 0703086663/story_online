@@ -1,8 +1,6 @@
 import * as he from 'he'
-import { aiTranslate, crawling } from 'src/common/utils'
-import { STATUS } from 'src/common'
+import { IChapter, IProduct, STATUS, aiTranslate, crawling } from '@/commons'
 import { CozyDto, JjwrcDto, TruyenFullDto, TruyenHdDto } from './crawler.dto'
-import { IChapter, IProduct } from 'src/common/interfaces'
 
 export class CrawlerService {
   async fromTruyenhd(crawlerDto: TruyenHdDto) {

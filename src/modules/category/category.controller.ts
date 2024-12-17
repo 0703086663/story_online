@@ -2,8 +2,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { CreateCategoryDto } from './category.dto'
-import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse } from 'src/common'
-import { ROLE } from 'src/common/enums/role.enum'
+import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse, ROLE } from '@/commons'
 
 @ApiTags('category')
 @Controller('category')
