@@ -22,10 +22,10 @@ export class CommentController {
     return this.commentService.findAll(filter)
   }
 
-  @Get(':productId')
+  @Get(':id')
   @GetResponse('Chapter')
-  indAllByProductId(@Param('productId') productId: string) {
-    return this.commentService.findAllByProductId(+productId)
+  fineOne(@Param('id') id: string, @Filter() filter?: IFilter) {
+    return this.commentService.findOne(+id, filter)
   }
 
   @Authorization()

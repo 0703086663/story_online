@@ -23,10 +23,8 @@ export class CommentService {
     }
   }
 
-  async findAllByProductId(productId: number) {
-    return await this.prisma.comment.findMany({
-      where: { productId },
-    })
+  async findOne(id: number, filter?: IFilter) {
+    return await this.prisma.comment.findFirst({ where: { id }, ...filter })
   }
 
   async findAll(filter?: IFilter) {
