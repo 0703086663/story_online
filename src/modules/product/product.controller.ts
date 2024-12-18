@@ -55,8 +55,7 @@ export class ProductController {
   @Get(':id/chapter')
   @GetResponse('Chapters')
   async findChapter(@Param('id') id: string) {
-    const chapters = await this.chapterService.findAll()
-    return chapters.filter(chap => chap.productId === +id)
+    return await this.chapterService.findAll({ where: { productId: +id } })
   }
 
   @Get(':id/chapter/:chapterNumber')
