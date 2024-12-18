@@ -27,7 +27,10 @@ export class RateService {
 
   async findAllByProductId(productId: number) {
     try {
-      return await this.prisma.rate.findMany({ where: { productId } })
+      const rates = await this.prisma.rate.findMany({ where: { productId } })
+      const count = await this.prisma.rate.count()
+
+      return { data: rates, count }
     } catch (err) {
       throw new Error(err)
     }

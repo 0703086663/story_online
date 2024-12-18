@@ -30,7 +30,10 @@ export class CommentService {
   }
 
   async findAll(filter?: IFilter) {
-    return await this.prisma.comment.findMany({ ...filter })
+    const comments = await this.prisma.comment.findMany({ ...filter })
+    const count = await this.prisma.comment.count()
+
+    return { data: comments, count }
   }
 
   async update(id: number, commentDto: CommentDto) {

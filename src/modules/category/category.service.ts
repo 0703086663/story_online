@@ -27,7 +27,10 @@ export class CategoryService {
 
   async findAll(filter?: IFilter) {
     try {
-      return await this.prisma.category.findMany({ ...filter })
+      const categories = await this.prisma.category.findMany({ ...filter })
+      const count = await this.prisma.category.count()
+
+      return { data: categories, count }
     } catch (err) {
       throw new Error(err)
     }

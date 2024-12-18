@@ -13,7 +13,7 @@ export class ListService {
         throw new BadRequestException('Invalid classification provided')
       }
 
-      return await this.prisma.list.findMany({
+      const lists = await this.prisma.list.findMany({
         where: {
           classification,
           createdBy: Number(userId),
@@ -30,6 +30,9 @@ export class ListService {
         },
         ...filter,
       })
+      const count = await this.prisma.list.count()
+
+      return { data: lists, count }
     } catch (err) {
       throw err
     }
