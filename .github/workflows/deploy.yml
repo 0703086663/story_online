@@ -44,7 +44,6 @@ jobs:
         run: |
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             cd /root/docker/novel
-            docker compose down api
-            docker compose pull api
-            docker compose up -d api
+            docker-compose pull api
+            docker-compose up -d api
           EOF
