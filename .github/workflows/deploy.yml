@@ -32,8 +32,8 @@ jobs:
       - name: Build and Push Docker image
         run: |
           cd novel-be
-          docker compose -f docker-compose.live.yml build app
-          docker compose -f docker-compose.live.yml push app
+          docker compose -f docker-compose.live.yml build dev
+          docker compose -f docker-compose.live.yml push dev
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,8 +43,9 @@ jobs:
       - name: SSH into VPS and deploy
         run: |
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-            cd /root/docker/novel
-            docker compose down api
-            docker compose pull api
-            docker compose up -d api
+            cd docker 
+            cd dev
+            docker-compose stop api-dev
+            docker-compose pull api-dev
+            docker-compose up -d api-dev
           EOF

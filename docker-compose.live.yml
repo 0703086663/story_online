@@ -8,3 +8,13 @@ services:
     restart: always
     ports:
       - 3334:3334
+
+  dev:
+    image: son29032001/novel:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api
+    restart: always
+    ports:
+      - 3334:3334
