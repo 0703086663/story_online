@@ -16,10 +16,7 @@ export class ProductService {
     if (!image) throw new BadRequestException('Image cannot be null')
     if (!authorName) throw new BadRequestException('Author name cannot be null')
 
-    const userExists = await this.prisma.user.findUnique({
-      where: { id: userId },
-    })
-
+    const userExists = await this.prisma.user.findUnique({ where: { id: userId } })
     if (!userExists) throw new BadRequestException('User not found')
 
     const categoriesExist = await Promise.all(
@@ -55,68 +52,21 @@ export class ProductService {
   }
 
   async findAll(filter?: IFilter) {
-    try {
-      const products = await this.prisma.product.findMany({ ...filter })
-      const count = await this.prisma.product.count()
-      const productDetails = await Promise.all(
-        products.map(async product => {
-          const rates = await this.prisma.rate.findMany({
-            where: { productId: product.id },
-          })
-
-          const averageRate = calculateAverageRate(rates)
-
-          const chapters = await this.prisma.chapter.findMany({
-            where: { productId: product.id },
-          })
-
-          return {
-            ...product,
-            averageRate: Math.round(averageRate),
-            chapterCount: chapters.length,
-          }
-        }),
-      )
-
-      return { data: productDetails, count }
-    } catch (err) {
-      throw new Error(err)
-    }
+    const products = await this.prisma.product.findMany({ ...filter })
+    const count = await this.prisma.product.count()
+    return { data: products, count }
   }
 
-  async findOne(id: number) {
-    const product = await this.prisma.product.findUnique({
-      where: { id },
-      include: {
-        categories: true,
-      },
-    })
-
-    if (!product) {
-      throw new NotFoundException(`Product with ID ${id} not found`)
-    }
-
-    const rates = await this.prisma.rate.findMany({ where: { productId: id } })
-    const averageRate = calculateAverageRate(rates)
-
-    const chapters = await this.prisma.chapter.findMany({
-      where: { productId: id },
-    })
-
-    return {
-      ...product,
-      averageRate: Math.round(averageRate),
-      chapterCount: chapters.length,
-    }
+  async findOne(id: number, filter?: IFilter) {
+    const product = await this.prisma.product.findFirst({ where: { id }, ...filter })
+    if (!product) throw new NotFoundException(`Product with ID ${id} not found`)
+    return product
   }
 
   async findOneChapter(id: number, chapterNumber: number) {
     try {
       const chapter = await this.prisma.chapter.findFirst({
-        where: {
-          productId: id,
-          chapterNumber,
-        },
+        where: { productId: id, chapterNumber },
       })
 
       if (!chapter) {
@@ -147,17 +97,9 @@ export class ProductService {
   }
 
   async remove(id: number) {
-    const result = await this.prisma.product.findUnique({
-      where: { id },
-    })
-
-    if (!result) {
-      throw new NotFoundException(`Product with ID ${id} not found`)
-    }
-
-    return this.prisma.product.delete({
-      where: { id },
-    })
+    const result = await this.prisma.product.findUnique({ where: { id } })
+    if (!result) throw new NotFoundException(`Product with ID ${id} not found`)
+    return this.prisma.product.delete({ where: { id } })
   }
 
   async incrementViewCount(id: number, ip: string, userId?: number) {
@@ -173,14 +115,8 @@ export class ProductService {
     })
 
     if (!view) {
-      await this.prisma.product.update({
-        where: { id },
-        data: { viewCount: product.viewCount + 1 },
-      })
-
-      return await this.prisma.view.create({
-        data: { userId, ip, productId: id },
-      })
+      await this.prisma.product.update({ where: { id }, data: { viewCount: product.viewCount + 1 } })
+      return await this.prisma.view.create({ data: { userId, ip, productId: id } })
     } else {
       const chapter = await this.prisma.chapter.findFirst({ where: { productId: id } })
       if (!chapter) throw new NotFoundException(`Chapter for Product ID ${id} not found`)
@@ -192,15 +128,8 @@ export class ProductService {
       const minRequiredTime = estimatedReadingTime * 60 * 1000 // time to read (min)
 
       if (now.getTime() - viewedTime.getTime() > minRequiredTime) {
-        await this.prisma.product.update({
-          where: { id },
-          data: { viewCount: product.viewCount + 1 },
-        })
-
-        return await this.prisma.view.update({
-          where: { id: view.id },
-          data: { viewedAt: now },
-        })
+        await this.prisma.product.update({ where: { id }, data: { viewCount: product.viewCount + 1 } })
+        return await this.prisma.view.update({ where: { id: view.id }, data: { viewedAt: now } })
       }
     }
 

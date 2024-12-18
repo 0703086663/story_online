@@ -65,48 +65,21 @@ export class ChapterService {
     }
   }
 
-  async findOne(id: number) {
-    const result = await this.prisma.chapter.findUnique({
-      where: { id },
-    })
-
-    if (!result) {
-      throw new NotFoundException(`Chapter with ID ${id} not found`)
-    }
-
+  async findOne(id: number, filter?: IFilter) {
+    const result = await this.prisma.chapter.findFirst({ where: { id }, ...filter })
+    if (!result) throw new NotFoundException(`Chapter with ID ${id} not found`)
     return result
   }
 
   async update(id: number, updateChapterDto: UpdateChapterDto) {
-    const result = await this.prisma.chapter.findUnique({
-      where: { id },
-    })
-
-    if (!result) {
-      throw new NotFoundException(`Chapter with ID ${id} not found`)
-    }
-
-    try {
-      return await this.prisma.chapter.update({
-        where: { id },
-        data: { ...updateChapterDto },
-      })
-    } catch (err) {
-      throw new Error(err)
-    }
+    const result = await this.prisma.chapter.findUnique({ where: { id } })
+    if (!result) throw new NotFoundException(`Chapter with ID ${id} not found`)
+    return this.prisma.chapter.update({ where: { id }, data: { ...updateChapterDto } })
   }
 
   async remove(id: number) {
-    const result = await this.prisma.chapter.findUnique({
-      where: { id },
-    })
-
-    if (!result) {
-      throw new NotFoundException(`Chapter with ID ${id} not found`)
-    }
-
-    return this.prisma.chapter.delete({
-      where: { id },
-    })
+    const result = await this.prisma.chapter.findUnique({ where: { id } })
+    if (!result) throw new NotFoundException(`Chapter with ID ${id} not found`)
+    return this.prisma.chapter.delete({ where: { id } })
   }
 }

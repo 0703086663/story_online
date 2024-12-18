@@ -8,28 +8,18 @@ export const Filter = createParamDecorator(
     const { take, skip, where, include, select, orderBy } = request.query
 
     try {
-      const parseBooleanRecord = (input: string) => {
-        const parsed = JSON.parse(input)
-        return Object.keys(parsed).reduce(
-          (acc, key) => {
-            acc[key] = Boolean(parsed[key])
-            return acc
-          },
-          {} as Record<string, boolean>,
-        )
-      }
-
       let normalizedFilter: IFilter = {}
       if (where) normalizedFilter.where = JSON.parse(where)
       if (Number(take)) normalizedFilter.take = Number(take)
       if (Number(skip)) normalizedFilter.skip = Number(skip)
-      if (include) normalizedFilter.include = parseBooleanRecord(include)
+      if (include) normalizedFilter.include = JSON.parse(include)
       if (orderBy) normalizedFilter.orderBy = JSON.parse(orderBy)
       // Just use Include or Select
-      if (select && include === 0) normalizedFilter.select = parseBooleanRecord(select)
+      if (select && include === 0) normalizedFilter.select = JSON.parse(select)
 
       return normalizedFilter
     } catch (error) {
+      console.error('Invalid filter query:', error)
       return {}
     }
   },

@@ -1,6 +1,7 @@
 import { BadGatewayException, Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { RateDto, UpdateRateDto } from './rate.dto'
 import { PrismaService } from '@/modules/prisma/prisma.service'
+import { IFilter } from '@/commons'
 
 @Injectable()
 export class RateService {
@@ -25,23 +26,14 @@ export class RateService {
     }
   }
 
-  async findAllByProductId(productId: number) {
-    try {
-      const rates = await this.prisma.rate.findMany({ where: { productId } })
-      const count = await this.prisma.rate.count()
-
-      return { data: rates, count }
-    } catch (err) {
-      throw new Error(err)
-    }
+  async findAll(filter?: IFilter) {
+    const rates = await this.prisma.rate.findMany({ ...filter })
+    const count = await this.prisma.rate.count()
+    return { data: rates, count }
   }
 
-  async findOne(id: number) {
-    try {
-      return await this.prisma.rate.findUnique({ where: { id } })
-    } catch (err) {
-      throw new Error(err)
-    }
+  async findOne(id: number, filter?: IFilter) {
+    return await this.prisma.rate.findFirst({ where: { id }, ...filter })
   }
 
   async update(userId: number, id: number, updateRateDto: UpdateRateDto) {
@@ -57,10 +49,7 @@ export class RateService {
       throw new BadGatewayException('Rating should be from 1 to 5')
 
     try {
-      return await this.prisma.rate.update({
-        where: { id },
-        data: { ...updateRateDto },
-      })
+      return await this.prisma.rate.update({ where: { id }, data: { ...updateRateDto } })
     } catch (err) {
       throw new Error(err)
     }

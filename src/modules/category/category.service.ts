@@ -26,37 +26,22 @@ export class CategoryService {
   }
 
   async findAll(filter?: IFilter) {
-    try {
-      const categories = await this.prisma.category.findMany({ ...filter })
-      const count = await this.prisma.category.count()
-
-      return { data: categories, count }
-    } catch (err) {
-      throw new Error(err)
-    }
+    const categories = await this.prisma.category.findMany({ ...filter })
+    const count = await this.prisma.category.count()
+    return { data: categories, count }
   }
 
-  async findOne(id: number) {
-    const result = await this.prisma.category.findUnique({
-      where: { id },
-    })
-
-    if (!result) {
-      throw new NotFoundException(`Category with ID ${id} not found`)
-    }
-
+  async findOne(id: number, filter?: IFilter) {
+    const result = await this.prisma.category.findFirst({ where: { id }, ...filter })
+    if (!result) throw new NotFoundException(`Category with ID ${id} not found`)
     return result
   }
 
   async update(id: number, categoryDto: CategoryDto) {
     if (!categoryDto.name) throw new BadRequestException('Name cannot be null')
 
-    const existingCategory = await this.prisma.category.findUnique({
-      where: { id },
-    })
-    if (!existingCategory) {
-      throw new NotFoundException(`Category with ID ${id} not found`)
-    }
+    const existingCategory = await this.prisma.category.findUnique({ where: { id } })
+    if (!existingCategory) throw new NotFoundException(`Category with ID ${id} not found`)
 
     try {
       return await this.prisma.category.update({
@@ -72,16 +57,8 @@ export class CategoryService {
   }
 
   async remove(id: number) {
-    const existingCategory = await this.prisma.category.findUnique({
-      where: { id },
-    })
-
-    if (!existingCategory) {
-      throw new NotFoundException(`Category with ID ${id} not found`)
-    }
-
-    return this.prisma.category.delete({
-      where: { id },
-    })
+    const existingCategory = await this.prisma.category.findUnique({ where: { id } })
+    if (!existingCategory) throw new NotFoundException(`Category with ID ${id} not found`)
+    return this.prisma.category.delete({ where: { id } })
   }
 }

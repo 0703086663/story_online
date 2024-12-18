@@ -33,8 +33,8 @@ export class CategoryController {
 
   @Get(':id')
   @GetResponse('Category')
-  async findOne(@Param('id') id: string) {
-    return await this.categoryService.findOne(+id)
+  async findOne(@Param('id') id: string, @Filter() filter?: IFilter) {
+    return await this.categoryService.findOne(+id, filter)
   }
 
   @Authorization(ROLE.MANAGER)

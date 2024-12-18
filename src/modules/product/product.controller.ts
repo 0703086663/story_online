@@ -42,27 +42,21 @@ export class ProductController {
 
   @Get(':id')
   @GetResponse('Product')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id)
+  findOne(@Param('id') id: string, @Filter() filter?: IFilter) {
+    return this.productService.findOne(+id, filter)
   }
 
-  @Get(':id/rate')
-  @GetResponse('Rate')
-  async findRate(@Param('id') id: string) {
-    return await this.rateService.findAllByProductId(+id)
-  }
+  // @Get(':id/chapter')
+  // @GetResponse('Chapters')
+  // async findChapter(@Param('id') id: string) {
+  //   return await this.chapterService.findAll({ where: { productId: +id } })
+  // }
 
-  @Get(':id/chapter')
-  @GetResponse('Chapters')
-  async findChapter(@Param('id') id: string) {
-    return await this.chapterService.findAll({ where: { productId: +id } })
-  }
-
-  @Get(':id/chapter/:chapterNumber')
-  @GetResponse('Chapter')
-  findOneChapter(@Param('id') id: string, @Param('chapterNumber') chapterNumber: string) {
-    return this.productService.findOneChapter(+id, +chapterNumber)
-  }
+  // @Get(':id/chapter/:chapterNumber')
+  // @GetResponse('Chapter')
+  // findOneChapter(@Param('id') id: string, @Param('chapterNumber') chapterNumber: string) {
+  //   return this.productService.findOneChapter(+id, +chapterNumber)
+  // }
 
   @OwnerAuthorization('product')
   @Patch(':id')

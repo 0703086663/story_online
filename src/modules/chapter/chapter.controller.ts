@@ -24,8 +24,8 @@ export class ChapterController {
 
   @Get(':id')
   @GetResponse('Chapter')
-  findOne(@Param('id') id: string) {
-    return this.chapterService.findOne(+id)
+  findOne(@Param('id') id: string, @Filter() filter?: IFilter) {
+    return this.chapterService.findOne(+id, filter)
   }
 
   @Patch(':id')

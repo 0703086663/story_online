@@ -2,7 +2,16 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiTags } from '@nestjs/swagger'
 import { RateService } from './rate.service'
 import { RateDto, UpdateRateDto } from './rate.dto'
-import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse, User } from '@/commons'
+import {
+  Authorization,
+  DeleteResponse,
+  Filter,
+  GetResponse,
+  IFilter,
+  PatchResponse,
+  PostResponse,
+  User,
+} from '@/commons'
 
 @ApiTags('rate')
 @Controller('rate')
@@ -16,10 +25,16 @@ export class RateController {
     return this.rateService.create(+userId, createRateDto)
   }
 
-  @Get(':id')
+  @Get('')
   @GetResponse('Rate')
-  findAllByProductId(@Param('id') id: string) {
-    return this.rateService.findOne(+id)
+  findAll(@Filter() filter?: IFilter) {
+    return this.rateService.findAll(filter)
+  }
+
+  @Get(':id')
+  @GetResponse('Product')
+  findOne(@Param('id') id: string, @Filter() filter?: IFilter) {
+    return this.rateService.findOne(+id, filter)
   }
 
   @Authorization()
