@@ -60,10 +60,13 @@ async function devMigrate(numberRecords: number) {
     const allCategories = await prisma.category.findMany()
     const randomCategories = faker.helpers.shuffle(allCategories).slice(0, faker.number.int({ max: 5 }))
 
+    const newProductName = faker.commerce.productName()
+    const isExistedProductName = await prisma.product.findMany({ where: { name: newProductName } })
+    if (isExistedProductName.length > 0) continue
     // Product
     await prisma.product.create({
       data: {
-        name: faker.commerce.productName(),
+        name: newProductName,
         description: faker.commerce.productDescription(),
         source: faker.internet.url(),
         image: faker.image.urlPlaceholder({ format: 'png' }),
