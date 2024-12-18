@@ -52,7 +52,7 @@ export class ChapterDto {
   price?: number
 
   @ApiProperty()
-  Product?: {
+  product?: {
     connect: {
       id: number
     }
