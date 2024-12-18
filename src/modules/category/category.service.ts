@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common'
 import { CategoryDto } from './category.dto'
 import { PrismaService } from '@/modules/prisma/prisma.service'
+import { IFilter } from '@/commons'
 
 @Injectable()
 export class CategoryService {
@@ -24,9 +25,9 @@ export class CategoryService {
     }
   }
 
-  async findAll() {
+  async findAll(filter?: IFilter) {
     try {
-      return await this.prisma.category.findMany()
+      return await this.prisma.category.findMany({ ...filter })
     } catch (err) {
       throw new Error(err)
     }

@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { PrismaService } from '@/modules/prisma/prisma.service'
 import { CommentDto } from './comment.dto'
+import { IFilter } from '@/commons'
 
 @Injectable()
 export class CommentService {
@@ -28,8 +29,8 @@ export class CommentService {
     })
   }
 
-  async findAll() {
-    return await this.prisma.comment.findMany({})
+  async findAll(filter?: IFilter) {
+    return await this.prisma.comment.findMany({ ...filter })
   }
 
   async update(id: number, commentDto: CommentDto) {

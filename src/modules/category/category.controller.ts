@@ -2,7 +2,16 @@ import { ApiTags } from '@nestjs/swagger'
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { CreateCategoryDto } from './category.dto'
-import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse, ROLE } from '@/commons'
+import {
+  Authorization,
+  DeleteResponse,
+  Filter,
+  GetResponse,
+  IFilter,
+  PatchResponse,
+  PostResponse,
+  ROLE,
+} from '@/commons'
 
 @ApiTags('category')
 @Controller('category')
@@ -18,8 +27,8 @@ export class CategoryController {
 
   @Get()
   @GetResponse('Category')
-  async findAll() {
-    return await this.categoryService.findAll()
+  async findAll(@Filter() filter?: IFilter) {
+    return await this.categoryService.findAll(filter)
   }
 
   @Get(':id')

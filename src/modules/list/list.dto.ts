@@ -24,7 +24,7 @@ export class ListDto {
   chapters: InheritChapterDto[]
 
   @ApiProperty()
-  User?: {
+  user?: {
     connect: {
       id: number
     }

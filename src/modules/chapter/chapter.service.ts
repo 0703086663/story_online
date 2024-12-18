@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '@/modules/prisma/prisma.service'
 import { CreateChapterDto, UpdateChapterDto } from './chapter.dto'
+import { IFilter } from '@/commons'
 
 @Injectable()
 export class ChapterService {
@@ -30,9 +31,9 @@ export class ChapterService {
     }
   }
 
-  async findAll() {
+  async findAll(filter?: IFilter) {
     try {
-      const chapters = await this.prisma.chapter.findMany()
+      const chapters = await this.prisma.chapter.findMany({ ...filter })
       // const paymentHistories = await this.prisma.paymentHistory.findMany({
       //   include: {
       //     chapters: true,

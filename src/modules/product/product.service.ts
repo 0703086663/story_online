@@ -2,6 +2,7 @@ import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundExc
 import { calculateAverageRate, stripHtml } from '@/commons/utils'
 import { PrismaService } from '@/modules/prisma/prisma.service'
 import { CreateProductDto, UpdateProductDto } from './product.dto'
+import { IFilter } from '@/commons'
 
 @Injectable()
 export class ProductService {
@@ -53,9 +54,10 @@ export class ProductService {
     }
   }
 
-  async findAll() {
+  async findAll(filter?: IFilter) {
     try {
-      const products = await this.prisma.product.findMany()
+      const products = await this.prisma.product.findMany({ ...filter })
+      const count = await this.prisma.product.count()
       const productDetails = await Promise.all(
         products.map(async product => {
           const rates = await this.prisma.rate.findMany({
@@ -76,7 +78,7 @@ export class ProductService {
         }),
       )
 
-      return productDetails
+      return { data: productDetails, count }
     } catch (err) {
       throw new Error(err)
     }

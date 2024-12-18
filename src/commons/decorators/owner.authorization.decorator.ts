@@ -1,6 +1,5 @@
 import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common'
-import { OwnerGuard } from '../guards'
-import { Authorization } from './authorization.decorator'
+import { OwnerGuard, Authorization } from '@/commons'
 import { ApiBearerAuth, ApiForbiddenResponse, ApiUnauthorizedResponse } from '@nestjs/swagger'
 
 export function OwnerAuthorization(resourceName: string) {

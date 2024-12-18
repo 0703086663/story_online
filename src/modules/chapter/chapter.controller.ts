@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiTags } from '@nestjs/swagger'
 import { ChapterService } from './chapter.service'
 import { CreateChapterDto, UpdateChapterDto } from './chapter.dto'
-import { DeleteResponse, GetResponse, PatchResponse, PostResponse, Authorization } from '@/commons'
+import { DeleteResponse, GetResponse, PatchResponse, PostResponse, Authorization, Filter, IFilter } from '@/commons'
 
 @ApiTags('chapter')
 @Controller('chapter')
@@ -18,8 +18,8 @@ export class ChapterController {
 
   @Get()
   @GetResponse('Chapters')
-  findAll() {
-    return this.chapterService.findAll()
+  findAll(@Filter() filter?: IFilter) {
+    return this.chapterService.findAll(filter)
   }
 
   @Get(':id')

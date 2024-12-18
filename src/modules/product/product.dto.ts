@@ -59,7 +59,7 @@ export class ProductDto {
   userId: number
 
   @ApiProperty()
-  User?: {
+  user?: {
     connect: {
       id: number
     }

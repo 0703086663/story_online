@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiTags } from '@nestjs/swagger'
 import { CommentService } from './comment.service'
 import { CommentDto } from './comment.dto'
-import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse } from '@/commons'
+import { Authorization, DeleteResponse, Filter, GetResponse, IFilter, PatchResponse, PostResponse } from '@/commons'
 
 @ApiTags('comment')
 @Controller('comment')
@@ -18,8 +18,8 @@ export class CommentController {
 
   @Get()
   @GetResponse('Chapters')
-  findAll() {
-    return this.commentService.findAll()
+  findAll(@Filter() filter?: IFilter) {
+    return this.commentService.findAll(filter)
   }
 
   @Get(':productId')

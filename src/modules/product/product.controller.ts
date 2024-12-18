@@ -1,10 +1,12 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Ip } from '@nestjs/common'
 import { ApiCreatedResponse, ApiNotModifiedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
-import { CreateProductDto, UpdateProductDto } from './product.dto'
+import { CreateProductDto, ProductDto, UpdateProductDto } from './product.dto'
 import {
   Authorization,
   DeleteResponse,
+  Filter,
   GetResponse,
+  IFilter,
   IpGuard,
   OwnerAuthorization,
   PatchResponse,
@@ -34,8 +36,8 @@ export class ProductController {
   @Get()
   @GetResponse('Product')
   @ApiOkResponse({ description: 'Products retrieved successfully' })
-  findAll() {
-    return this.productService.findAll()
+  findAll(@Filter() filter?: IFilter) {
+    return this.productService.findAll(filter)
   }
 
   @Get(':id')

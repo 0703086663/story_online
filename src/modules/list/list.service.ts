@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, Query } from '@nestjs/common'
-import { CLASSIFICATION } from '@/commons'
+import { CLASSIFICATION, IFilter } from '@/commons'
 import { PrismaService } from '@/modules/prisma/prisma.service'
 import { UpdateListDto } from './list.dto'
 
@@ -7,7 +7,7 @@ import { UpdateListDto } from './list.dto'
 export class ListService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(@Query('userId') userId: number, @Query('classification') classification: CLASSIFICATION) {
+  async findAll(userId: number, classification: CLASSIFICATION, filter?: IFilter) {
     try {
       if (classification !== CLASSIFICATION.FAVORITE && classification !== CLASSIFICATION.READING) {
         throw new BadRequestException('Invalid classification provided')
@@ -28,6 +28,7 @@ export class ListService {
               : false,
           products: classification === CLASSIFICATION.FAVORITE ? true : false,
         },
+        ...filter,
       })
     } catch (err) {
       throw err
