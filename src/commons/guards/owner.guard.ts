@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, ForbiddenException, Type } from '@nestjs/common'
 import { PrismaService } from 'src/modules/prisma/prisma.service'
-import { ROLE } from '../enums/role.enum'
+import { ROLE } from '../enums'
 
 export function OwnerGuard(resourceName: string): Type<CanActivate> {
   @Injectable()

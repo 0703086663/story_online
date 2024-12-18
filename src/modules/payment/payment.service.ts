@@ -1,6 +1,6 @@
 import Stripe from 'stripe'
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '@/modules/prisma/prisma.service'
 import { CreatePaymentDto, IntentDto } from './payment.dto'
 
 const stripe = new Stripe(process.env.STRIPE_API_KEY)

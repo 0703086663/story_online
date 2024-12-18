@@ -1,6 +1,6 @@
 import { BadGatewayException, Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { RateDto, UpdateRateDto } from './rate.dto'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '@/modules/prisma/prisma.service'
 
 @Injectable()
 export class RateService {

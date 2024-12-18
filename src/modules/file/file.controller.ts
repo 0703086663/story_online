@@ -2,7 +2,7 @@ import { Controller, Post, ParseFilePipe, FileTypeValidator, UploadedFiles, Get,
 import { ApiInternalServerErrorResponse, ApiTags } from '@nestjs/swagger'
 import { FileService } from './file.service'
 import { Response } from 'express'
-import { GetResponse, Upload } from 'src/common'
+import { GetResponse, Upload } from '@/commons'
 
 @ApiTags('file')
 @ApiInternalServerErrorResponse({ description: 'Internal server error' })

@@ -1,7 +1,7 @@
 import { ApiProperty, PickType } from '@nestjs/swagger'
 import { faker } from '@faker-js/faker'
-import { InheritProductDto } from '../product/product.dto'
-import { InheritChapterDto } from '../chapter/chapter.dto'
+import { InheritProductDto } from '@/modules/product/product.dto'
+import { InheritChapterDto } from '@/modules/chapter/chapter.dto'
 
 export class ListDto {
   @ApiProperty({ required: false, default: 1 })
@@ -24,7 +24,7 @@ export class ListDto {
   chapters: InheritChapterDto[]
 
   @ApiProperty()
-  User?: {
+  user?: {
     connect: {
       id: number
     }

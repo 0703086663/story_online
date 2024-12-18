@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, Query } from '@nestjs/common'
-import { CLASSIFICATION } from 'src/common'
-import { PrismaService } from '../prisma/prisma.service'
+import { CLASSIFICATION } from '@/commons'
+import { PrismaService } from '@/modules/prisma/prisma.service'
 import { UpdateListDto } from './list.dto'
 
 @Injectable()

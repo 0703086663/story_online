@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { ApiProperty, PickType } from '@nestjs/swagger'
-import { InheritChapterDto } from '../chapter/chapter.dto'
+import { InheritChapterDto } from '@/modules/chapter/chapter.dto'
 
 export class PaymentDto {
   @ApiProperty({ required: true, default: 1 })
@@ -16,7 +16,7 @@ export class PaymentDto {
   amount: number
 
   @ApiProperty()
-  User?: {
+  user?: {
     connect: {
       id: number
     }

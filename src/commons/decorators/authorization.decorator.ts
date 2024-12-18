@@ -1,7 +1,6 @@
 import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiForbiddenResponse, ApiUnauthorizedResponse } from '@nestjs/swagger'
-import { AuthGuard, RolesGuard } from '../guards'
-import { ROLE } from '../enums/role.enum'
+import { AuthGuard, RolesGuard, ROLE } from '@/commons'
 
 /**
  * @example ```@Authorization()``` - For check login

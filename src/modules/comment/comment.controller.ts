@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiTags } from '@nestjs/swagger'
 import { CommentService } from './comment.service'
 import { CommentDto } from './comment.dto'
-import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse } from 'src/common'
+import { Authorization, DeleteResponse, GetResponse, PatchResponse, PostResponse } from '@/commons'
 
 @ApiTags('comment')
 @Controller('comment')

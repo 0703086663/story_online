@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger'
-import { STATE } from 'src/common'
+import { STATE } from '@/commons'
 
 export class CategoryDto {
   @ApiProperty({
