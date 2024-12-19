@@ -30,7 +30,7 @@ export class ListService {
         },
         ...filter,
       })
-      const count = await this.prisma.list.count()
+      const count = await this.prisma.list.count({ where: { ...filter.where } })
 
       return { data: lists, count }
     } catch (err) {

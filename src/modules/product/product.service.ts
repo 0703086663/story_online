@@ -53,7 +53,7 @@ export class ProductService {
 
   async findAll(filter?: IFilter) {
     const products = await this.prisma.product.findMany({ ...filter })
-    const count = await this.prisma.product.count()
+    const count = await this.prisma.product.count({ where: { ...filter.where } })
     return { data: products, count }
   }
 

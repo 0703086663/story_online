@@ -27,7 +27,7 @@ export class CategoryService {
 
   async findAll(filter?: IFilter) {
     const categories = await this.prisma.category.findMany({ ...filter })
-    const count = await this.prisma.category.count()
+    const count = await this.prisma.category.count({ where: { ...filter.where } })
     return { data: categories, count }
   }
 

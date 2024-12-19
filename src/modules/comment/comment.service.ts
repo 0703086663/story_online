@@ -29,7 +29,7 @@ export class CommentService {
 
   async findAll(filter?: IFilter) {
     const comments = await this.prisma.comment.findMany({ ...filter })
-    const count = await this.prisma.comment.count()
+    const count = await this.prisma.comment.count({ where: { ...filter.where } })
 
     return { data: comments, count }
   }

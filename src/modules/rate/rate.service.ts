@@ -28,7 +28,7 @@ export class RateService {
 
   async findAll(filter?: IFilter) {
     const rates = await this.prisma.rate.findMany({ ...filter })
-    const count = await this.prisma.rate.count()
+    const count = await this.prisma.rate.count({ where: { ...filter.where } })
     return { data: rates, count }
   }
 

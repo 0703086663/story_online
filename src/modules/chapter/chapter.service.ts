@@ -34,7 +34,7 @@ export class ChapterService {
   async findAll(filter?: IFilter) {
     try {
       const chapters = await this.prisma.chapter.findMany({ ...filter })
-      const count = await this.prisma.chapter.count()
+      const count = await this.prisma.chapter.count({ where: { ...filter.where } })
       // const paymentHistories = await this.prisma.paymentHistory.findMany({
       //   include: {
       //     chapters: true,
