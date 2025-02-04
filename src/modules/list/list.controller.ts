@@ -14,7 +14,7 @@ export class ListController {
   @GetResponse('List')
   findAllReading(
     @User('id') userId: string,
-    @Query('classification') classification: CLASSIFICATION,
+    @Query('classification') classification?: CLASSIFICATION,
     @Filter() filter?: IFilter,
   ) {
     return this.listService.findAll(+userId, classification, filter)
@@ -23,7 +23,7 @@ export class ListController {
   @OwnerAuthorization('list')
   @Patch()
   @PatchResponse('List')
-  update(@Body() updateListDto: UpdateListDto) {
-    return this.listService.update(updateListDto)
+  update(@User('id') userId: string, @Body() updateListDto: UpdateListDto) {
+    return this.listService.update(+userId, updateListDto)
   }
 }

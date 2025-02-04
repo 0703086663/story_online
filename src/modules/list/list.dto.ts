@@ -31,4 +31,4 @@ export class ListDto {
   }
 }
 
-export class UpdateListDto extends PickType(ListDto, ['createdBy', 'classification', 'chapters', 'products']) {}
+export class UpdateListDto extends PickType(ListDto, ['classification', 'chapters', 'products']) {}

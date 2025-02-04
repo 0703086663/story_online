@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Query } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { CLASSIFICATION, IFilter } from '@/commons'
 import { PrismaService } from '@/modules/prisma/prisma.service'
 import { UpdateListDto } from './list.dto'
@@ -7,30 +7,33 @@ import { UpdateListDto } from './list.dto'
 export class ListService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(userId: number, classification: CLASSIFICATION, filter?: IFilter) {
+  async findAll(createdBy: number, classification?: CLASSIFICATION, filter?: IFilter) {
     try {
-      if (classification !== CLASSIFICATION.FAVORITE && classification !== CLASSIFICATION.READING) {
+      if (classification && classification !== CLASSIFICATION.FAVORITE && classification !== CLASSIFICATION.READING) {
         throw new BadRequestException('Invalid classification provided')
       }
 
       const lists = await this.prisma.list.findMany({
         where: {
-          classification,
-          createdBy: Number(userId),
+          ...(classification ? { classification } : {}),
+          createdBy,
         },
         select: {
           id: true,
           classification: true,
           createdBy: true,
+          updatedAt: true,
           chapters:
-            classification === CLASSIFICATION.READING
+            classification === CLASSIFICATION.READING || classification === undefined
               ? { select: { id: true, productId: true, chapterName: true } }
               : false,
-          products: classification === CLASSIFICATION.FAVORITE ? true : false,
+          products: classification === CLASSIFICATION.FAVORITE || classification === undefined ? true : false,
         },
         ...filter,
       })
-      const count = await this.prisma.list.count({ where: { ...filter.where } })
+      const count = await this.prisma.list.count({
+        where: { ...(classification ? { classification } : {}), createdBy, ...filter.where },
+      })
 
       return { data: lists, count }
     } catch (err) {
@@ -38,8 +41,8 @@ export class ListService {
     }
   }
 
-  async update(updateListDto: UpdateListDto) {
-    const { createdBy, classification, chapters, products } = updateListDto
+  async update(createdBy: number, updateListDto: UpdateListDto) {
+    const { classification, chapters, products } = updateListDto
 
     const productDetail = await this.prisma.product.findFirst({
       where: { id: products[0].id },
@@ -114,6 +117,7 @@ export class ListService {
             id: true,
             classification: true,
             createdBy: true,
+            updatedAt: true,
             chapters: classification === CLASSIFICATION.READING ? true : false,
             products: classification === CLASSIFICATION.FAVORITE ? true : false,
           },
