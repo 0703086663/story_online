@@ -7,30 +7,27 @@ import { UpdateListDto } from './list.dto'
 export class ListService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(createdBy: number, classification?: CLASSIFICATION, filter?: IFilter) {
-    try {
-      if (classification && classification !== CLASSIFICATION.FAVORITE && classification !== CLASSIFICATION.READING) {
-        throw new BadRequestException('Invalid classification provided')
-      }
+  async findAll(createdBy: number, filter?: IFilter) {
+    const classification = filter?.where?.classification
 
+    if (classification && ![CLASSIFICATION.FAVORITE, CLASSIFICATION.READING].includes(classification)) {
+      throw new BadRequestException('Invalid classification provided')
+    }
+
+    try {
       const lists = await this.prisma.list.findMany({
-        where: {
-          ...(classification ? { classification } : {}),
-          createdBy,
-        },
         select: {
           id: true,
           classification: true,
           createdBy: true,
           updatedAt: true,
-          chapters: classification === CLASSIFICATION.READING || classification === undefined ? true : false,
-          products: classification === CLASSIFICATION.FAVORITE || classification === undefined ? true : false,
+          chapters: classification !== CLASSIFICATION.FAVORITE,
+          products: classification !== CLASSIFICATION.READING,
         },
         ...filter,
+        where: { createdBy, ...filter?.where },
       })
-      const count = await this.prisma.list.count({
-        where: { ...(classification ? { classification } : {}), createdBy, ...filter.where },
-      })
+      const count = await this.prisma.list.count({ where: { createdBy, ...filter?.where } })
 
       return { data: lists, count }
     } catch (err) {

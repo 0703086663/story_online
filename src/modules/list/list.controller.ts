@@ -2,7 +2,7 @@ import { Controller, Get, Body, Patch, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ListService } from './list.service'
 import { UpdateListDto } from './list.dto'
-import { CLASSIFICATION, GetResponse, PatchResponse, Filter, IFilter, OwnerAuthorization, User } from '@/commons'
+import { GetResponse, PatchResponse, Filter, IFilter, OwnerAuthorization, User } from '@/commons'
 
 @ApiTags('list')
 @Controller('list')
@@ -12,12 +12,8 @@ export class ListController {
   @OwnerAuthorization('list')
   @Get('/')
   @GetResponse('List')
-  findAllReading(
-    @User('id') userId: string,
-    @Query('classification') classification?: CLASSIFICATION,
-    @Filter() filter?: IFilter,
-  ) {
-    return this.listService.findAll(+userId, classification, filter)
+  findAllReading(@User('id') userId: string, @Filter() filter?: IFilter) {
+    return this.listService.findAll(+userId, filter)
   }
 
   @OwnerAuthorization('list')
