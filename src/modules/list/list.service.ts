@@ -21,7 +21,7 @@ export class ListService {
           classification: true,
           createdBy: true,
           updatedAt: true,
-          chapters: classification !== CLASSIFICATION.FAVORITE,
+          chapters: classification !== CLASSIFICATION.FAVORITE ? { include: { product: true } } : false,
           products: classification !== CLASSIFICATION.READING,
         },
         ...filter,
