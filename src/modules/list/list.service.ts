@@ -23,10 +23,7 @@ export class ListService {
           classification: true,
           createdBy: true,
           updatedAt: true,
-          chapters:
-            classification === CLASSIFICATION.READING || classification === undefined
-              ? { select: { id: true, productId: true, chapterName: true } }
-              : false,
+          chapters: classification === CLASSIFICATION.READING || classification === undefined ? true : false,
           products: classification === CLASSIFICATION.FAVORITE || classification === undefined ? true : false,
         },
         ...filter,
