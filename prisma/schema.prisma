@@ -133,6 +133,8 @@ model list {
   user           user     @relation(fields: [createdBy], references: [id])
   chapters       chapter[]
   products       product[]
+
+  @@unique([createdBy, classification])
 }
 
 model payment {

@@ -2,6 +2,7 @@ import { ApiProperty, PickType } from '@nestjs/swagger'
 import { faker } from '@faker-js/faker'
 import { InheritProductDto } from '@/modules/product/product.dto'
 import { InheritChapterDto } from '@/modules/chapter/chapter.dto'
+import { CLASSIFICATION } from '@/commons'
 
 export class ListDto {
   @ApiProperty({ required: false, default: 1 })
@@ -15,7 +16,7 @@ export class ListDto {
     description: 'Classification of list',
     example: faker.helpers.arrayElement(['READING', 'FAVORITE']),
   })
-  classification: string
+  classification: CLASSIFICATION
 
   @ApiProperty({ type: () => [InheritProductDto] })
   products: InheritProductDto[]

@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Query } from '@nestjs/common'
+import { Controller, Get, Body, Patch } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ListService } from './list.service'
 import { UpdateListDto } from './list.dto'

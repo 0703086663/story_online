@@ -1,123 +1,11 @@
-/*
-  Warnings:
+-- CreateEnum
+CREATE TYPE "STATE" AS ENUM ('ACTIVE', 'INACTIVE');
 
-  - You are about to drop the `Category` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Chapter` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Collabration` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Comment` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `List` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `PaymentHistory` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Product` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Rate` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `View` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `_CategoryToProduct` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `_ChapterToList` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `_ChapterToPaymentHistory` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `_ListToProduct` table. If the table is not empty, all the data it contains will be lost.
+-- CreateEnum
+CREATE TYPE "STATUS" AS ENUM ('PROGRESS', 'DONE');
 
-*/
--- DropForeignKey
-ALTER TABLE "Chapter" DROP CONSTRAINT "Chapter_productId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Collabration" DROP CONSTRAINT "Collabration_productId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Collabration" DROP CONSTRAINT "Collabration_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Comment" DROP CONSTRAINT "Comment_createdBy_fkey";
-
--- DropForeignKey
-ALTER TABLE "Comment" DROP CONSTRAINT "Comment_productId_fkey";
-
--- DropForeignKey
-ALTER TABLE "List" DROP CONSTRAINT "List_createdBy_fkey";
-
--- DropForeignKey
-ALTER TABLE "PaymentHistory" DROP CONSTRAINT "PaymentHistory_createdBy_fkey";
-
--- DropForeignKey
-ALTER TABLE "Product" DROP CONSTRAINT "Product_createdBy_fkey";
-
--- DropForeignKey
-ALTER TABLE "Rate" DROP CONSTRAINT "Rate_createdBy_fkey";
-
--- DropForeignKey
-ALTER TABLE "Rate" DROP CONSTRAINT "Rate_productId_fkey";
-
--- DropForeignKey
-ALTER TABLE "View" DROP CONSTRAINT "View_productId_fkey";
-
--- DropForeignKey
-ALTER TABLE "View" DROP CONSTRAINT "View_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "_CategoryToProduct" DROP CONSTRAINT "_CategoryToProduct_A_fkey";
-
--- DropForeignKey
-ALTER TABLE "_CategoryToProduct" DROP CONSTRAINT "_CategoryToProduct_B_fkey";
-
--- DropForeignKey
-ALTER TABLE "_ChapterToList" DROP CONSTRAINT "_ChapterToList_A_fkey";
-
--- DropForeignKey
-ALTER TABLE "_ChapterToList" DROP CONSTRAINT "_ChapterToList_B_fkey";
-
--- DropForeignKey
-ALTER TABLE "_ChapterToPaymentHistory" DROP CONSTRAINT "_ChapterToPaymentHistory_A_fkey";
-
--- DropForeignKey
-ALTER TABLE "_ChapterToPaymentHistory" DROP CONSTRAINT "_ChapterToPaymentHistory_B_fkey";
-
--- DropForeignKey
-ALTER TABLE "_ListToProduct" DROP CONSTRAINT "_ListToProduct_A_fkey";
-
--- DropForeignKey
-ALTER TABLE "_ListToProduct" DROP CONSTRAINT "_ListToProduct_B_fkey";
-
--- DropTable
-DROP TABLE "Category";
-
--- DropTable
-DROP TABLE "Chapter";
-
--- DropTable
-DROP TABLE "Collabration";
-
--- DropTable
-DROP TABLE "Comment";
-
--- DropTable
-DROP TABLE "List";
-
--- DropTable
-DROP TABLE "PaymentHistory";
-
--- DropTable
-DROP TABLE "Product";
-
--- DropTable
-DROP TABLE "Rate";
-
--- DropTable
-DROP TABLE "User";
-
--- DropTable
-DROP TABLE "View";
-
--- DropTable
-DROP TABLE "_CategoryToProduct";
-
--- DropTable
-DROP TABLE "_ChapterToList";
-
--- DropTable
-DROP TABLE "_ChapterToPaymentHistory";
-
--- DropTable
-DROP TABLE "_ListToProduct";
+-- CreateEnum
+CREATE TYPE "ROLE" AS ENUM ('USER', 'MANAGER', 'ADMIN');
 
 -- CreateTable
 CREATE TABLE "category" (
@@ -125,6 +13,7 @@ CREATE TABLE "category" (
     "name" TEXT NOT NULL,
     "image" TEXT,
     "description" TEXT,
+    "state" "STATE" NOT NULL DEFAULT 'ACTIVE',
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "category_pkey" PRIMARY KEY ("id")
@@ -138,6 +27,7 @@ CREATE TABLE "product" (
     "source" TEXT NOT NULL,
     "image" TEXT NOT NULL,
     "status" "STATUS" NOT NULL DEFAULT 'PROGRESS',
+    "state" "STATE" NOT NULL DEFAULT 'ACTIVE',
     "viewCount" INTEGER NOT NULL DEFAULT 0,
     "description" TEXT,
     "createdBy" INTEGER NOT NULL,
@@ -155,6 +45,7 @@ CREATE TABLE "chapter" (
     "content" TEXT NOT NULL,
     "chapterNumber" INTEGER NOT NULL,
     "price" DOUBLE PRECISION,
+    "state" "STATE" NOT NULL DEFAULT 'ACTIVE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "users" INTEGER[],
@@ -170,7 +61,7 @@ CREATE TABLE "user" (
     "email" TEXT NOT NULL,
     "phone" TEXT,
     "birthdate" TIMESTAMP(3),
-    "picture" TEXT,
+    "image" TEXT,
     "password" TEXT,
     "money" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "refreshToken" TEXT,
@@ -209,6 +100,8 @@ CREATE TABLE "list" (
     "id" SERIAL NOT NULL,
     "classification" TEXT NOT NULL,
     "createdBy" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "list_pkey" PRIMARY KEY ("id")
 );
@@ -272,6 +165,9 @@ CREATE TABLE "_listToproduct" (
 CREATE UNIQUE INDEX "category_name_key" ON "category"("name");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "product_name_key" ON "product"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "chapter_productId_chapterNumber_key" ON "chapter"("productId", "chapterNumber");
 
 -- CreateIndex
@@ -279,6 +175,9 @@ CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "rate_createdBy_productId_key" ON "rate"("createdBy", "productId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "list_createdBy_classification_key" ON "list"("createdBy", "classification");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "view_userId_productId_key" ON "view"("userId", "productId");

@@ -141,18 +141,27 @@ async function devMigrate(numberRecords: number) {
     const randomChapters = faker.helpers.shuffle(allChapters).slice(0, faker.number.int({ max: 5 }))
     const randomClassification = faker.helpers.arrayElement(['READING', 'FAVORITE'])
 
-    await prisma.list.create({
-      data: {
+    const existingList = await prisma.list.findFirst({
+      where: {
         createdBy: randomUser.id,
         classification: randomClassification,
-        chapters: {
-          connect: randomClassification === 'READING' ? randomChapters.map(chapter => ({ id: chapter.id })) : [],
-        },
-        products: {
-          connect: randomClassification === 'FAVORITE' ? randomProducts.map(product => ({ id: product.id })) : [],
-        },
       },
     })
+
+    if (!existingList) {
+      await prisma.list.create({
+        data: {
+          createdBy: randomUser.id,
+          classification: randomClassification,
+          chapters: {
+            connect: randomClassification === 'READING' ? randomChapters.map(chapter => ({ id: chapter.id })) : [],
+          },
+          products: {
+            connect: randomClassification === 'FAVORITE' ? randomProducts.map(product => ({ id: product.id })) : [],
+          },
+        },
+      })
+    }
 
     // payment
     await prisma.payment.create({

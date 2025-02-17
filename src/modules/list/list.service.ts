@@ -38,85 +38,51 @@ export class ListService {
   async update(createdBy: number, updateListDto: UpdateListDto) {
     const { classification, chapters, products } = updateListDto
 
-    const productDetail = await this.prisma.product.findFirst({
-      where: { id: products[0].id },
-    })
-
-    const existingList = await this.prisma.list.findFirst({
-      where: { createdBy, classification },
-      include: {
-        chapters: true,
-        products: true,
-      },
-    })
+    if (![CLASSIFICATION.FAVORITE, CLASSIFICATION.READING].includes(classification)) {
+      throw new BadRequestException('Invalid classification provided')
+    }
 
     try {
-      if (!existingList) {
-        return await this.prisma.list.create({
-          data: {
-            createdBy,
-            classification,
-            chapters:
-              classification === CLASSIFICATION.READING
-                ? {
-                    connect: chapters.map(chapter => ({
-                      id: chapter.id,
-                    })),
-                  }
-                : undefined,
-            products:
-              classification === CLASSIFICATION.FAVORITE
-                ? {
-                    connect: products.map(product => ({
-                      id: product.id,
-                    })),
-                  }
-                : undefined,
-          },
-          select: {
-            id: true,
-            classification: true,
-            createdBy: true,
-            chapters: classification === CLASSIFICATION.READING ? true : false,
-            products: classification === CLASSIFICATION.FAVORITE ? true : false,
-          },
-        })
-      } else {
-        const existedItem = existingList.products.map(v => v.id).includes(products[0].id)
-        return await this.prisma.list.update({
-          where: {
-            id: existingList.id,
-            createdBy,
-            classification: classification,
-          },
-          data: {
-            chapters:
-              classification === CLASSIFICATION.READING
-                ? {
-                    set: chapters.map(chapter => ({
-                      id: chapter.id,
-                    })),
-                  }
-                : undefined,
-            products:
-              classification === CLASSIFICATION.FAVORITE
-                ? {
-                    set: existedItem
-                      ? [...existingList.products.filter(v => v.id !== products[0].id)]
-                      : [...existingList.products, productDetail],
-                  }
-                : undefined,
-          },
-          select: {
-            id: true,
-            classification: true,
-            createdBy: true,
-            updatedAt: true,
-            chapters: classification === CLASSIFICATION.READING ? true : false,
-            products: classification === CLASSIFICATION.FAVORITE ? true : false,
-          },
-        })
+      const existingList = await this.prisma.list.findFirst({
+        where: { createdBy, classification },
+        include: classification === CLASSIFICATION.READING ? { chapters: true } : { products: true },
+      })
+
+      if (classification === CLASSIFICATION.FAVORITE && (!products || products.length === 0)) {
+        throw new BadRequestException("Products can't be null")
       }
+
+      if (classification === CLASSIFICATION.READING && (!chapters || chapters.length === 0)) {
+        throw new BadRequestException("Chapters can't be null")
+      }
+
+      const entity = classification === CLASSIFICATION.FAVORITE ? products : chapters
+      const entityField = classification === CLASSIFICATION.FAVORITE ? 'products' : 'chapters'
+
+      const existingEntityIds = existingList?.[entityField].map(e => e.id) || []
+      const entitiesToConnect = entity.filter(e => !existingEntityIds.includes(e.id))
+      const entitiesToDisconnect = entity.filter(e => existingEntityIds.includes(e.id))
+
+      return await this.prisma.list.upsert({
+        where: { createdBy_classification: { createdBy, classification } },
+        create: {
+          createdBy,
+          classification,
+          [entityField]: { connect: entity.map(e => ({ id: e.id })) },
+        },
+        update: {
+          [entityField]: {
+            connect: entitiesToConnect.map(e => ({ id: e.id })),
+            disconnect: entitiesToDisconnect.map(e => ({ id: e.id })),
+          },
+        },
+        select: {
+          id: true,
+          classification: true,
+          createdBy: true,
+          [entityField]: true,
+        },
+      })
     } catch (err) {
       throw err
     }
