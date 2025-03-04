@@ -1,6 +1,6 @@
 services:
   api:
-    image: son29032001/novel
+    image: developersota/backend
     build:
       context: .
       dockerfile: Dockerfile
